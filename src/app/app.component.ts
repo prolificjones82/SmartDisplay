@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'SmartDisplay';
+
+    showSetup   : boolean = false;
+
+    constructor() {
+        const settings = localStorage.getItem('settings');
+        if (settings == null) {
+            // this.showSetup = true;
+        }
+        console.log(this.showSetup);
+    }
 }
