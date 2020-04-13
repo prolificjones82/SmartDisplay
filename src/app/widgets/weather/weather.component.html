@@ -3,5 +3,9 @@
         <span class="sr-only">Loading...</span>
     </div>
 </div>
+
 <div *ngIf="weather && !displayError">Weather Information!</div>
-<div *ngIf="displayError">Weather Information Error!</div>
+
+<div *ngIf="displayError" class="d-flex justify-content-center align-items-center h-100">
+    <p>{{errorMessage}}</p>
+</div>

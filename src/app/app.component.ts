@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { SettingsService } from './services/settings.service';
+import { Settings } from './interfaces/settings';
 
 @Component({
   selector: 'app-root',
@@ -7,13 +9,25 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-    showSetup   : boolean = false;
+    public showSetup = false;
+    public settings: Settings = {};
 
-    constructor() {
-        const settings = localStorage.getItem('settings');
+    constructor(
+        protected settingsService: SettingsService
+    ) {
+        const settings = localStorage.getItem('userSettings');
         if (settings == null) {
-            // this.showSetup = true;
+            this.showSetup = true;
+        } else {
+            this.settings = JSON.parse(settings);
         }
-        console.log(this.showSetup);
+
+        this.settingsService.settingState.subscribe(
+            (response) => {
+                this.showSetup = response;
+                const savedSettings = localStorage.getItem('userSettings');
+                this.settings = JSON.parse(savedSettings);
+            }
+        );
     }
 }

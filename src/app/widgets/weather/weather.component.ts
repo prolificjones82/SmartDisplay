@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { Settings } from 'src/app/interfaces/settings';
+import { Weather } from 'src/app/interfaces/weather';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
     selector: 'app-weather',
@@ -9,45 +12,42 @@ import { Observable } from 'rxjs';
 })
 export class WeatherComponent implements OnInit {
 
-    private apiUrl  : string = 'https://api.openweathermap.org/data/2.5/onecall';
-    private apiKey  : string = 'f96c1a06daf301778aa2ff24ef54f969';
-    private lat     : number = 0;
-    private lng     : number = 0;
+    @Input() settings: Settings;
 
-    public displayError : boolean = false;
-    public weather      : any;
+    private apiUrl = 'https://api.openweathermap.org/data/2.5/onecall';
+    private apiKey = 'f96c1a06daf301778aa2ff24ef54f969';
+
+    public displayError = false;
+    public errorMessage: string;
+    public weather: Weather;
 
     constructor(
         private http: HttpClient
-    ) {
-        
-    }
+    ) {}
 
     ngOnInit(): void {
-        if (navigator.geolocation) {
-            this.getLocation().subscribe(
-                (position) => {
-                    this.lng = position.coords.longitude;
-                    this.lat = position.coords.latitude;
-
-                    const apiUrl = this.buildUrl();
-                    this.http.get(apiUrl).subscribe(
-                        (response) => {
-                            console.log(response);
-                            this.weather = response;
-                        },
-                        (error) => {
-                            console.log(error);
-                        }
-                    )
+        this.getWeatherData()
+            .subscribe(
+                (response) => {
+                    console.log(response);
+                    this.weather = response;
                 },
                 (error) => {
                     this.displayError = true;
+                    this.errorMessage = error.message;
                 }
-            )
-        } else {
-            this.displayError = true;
-        }
+            );
+    }
+
+    getWeatherData(): Observable<Weather> {
+        const apiUrl = this.buildUrl();
+        return this.http.get(apiUrl).pipe(
+            map((data: Weather) => {
+                return data;
+            }), catchError( error => {
+                return throwError( 'Something went wrong!' );
+            })
+        );
     }
 
     getLocation(): Observable<any> {
@@ -65,6 +65,6 @@ export class WeatherComponent implements OnInit {
     }
 
     buildUrl(): string {
-        return `${this.apiUrl}?lat=${this.lat}&lon=${this.lng}&units=metric&lang=en&appid=${this.apiKey}`;
+        return `${this.apiUrl}?lat=${this.settings.lat}&lon=${this.settings.lng}&units=metric&lang=en&appid=${this.apiKey}`;
     }
 }
