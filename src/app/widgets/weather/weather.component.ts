@@ -29,7 +29,6 @@ export class WeatherComponent implements OnInit {
         this.getWeatherData()
             .subscribe(
                 (response) => {
-                    console.log(response);
                     this.weather = response;
                 },
                 (error) => {

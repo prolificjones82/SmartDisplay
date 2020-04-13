@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TimeComponent } from './widgets/time/time.component';
 import { WeatherComponent } from './widgets/weather/weather.component';
+import { RainTempGraphComponent } from './components/rain-temp-graph/rain-temp-graph.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SettingsComponent,
     TimeComponent,
-    WeatherComponent
+    WeatherComponent,
+    RainTempGraphComponent
   ],
   imports: [
     BrowserModule,

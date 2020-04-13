@@ -1,9 +1,9 @@
 export interface Weather {
     current?: CurrentWeather;
-    hourly?: HourlyWeather;
+    hourly?: Array<HourlyWeather>;
 }
 
-interface CurrentWeather {
+export interface CurrentWeather {
     dt: Date;
     sunrise: Date;
     sunset: Date;
@@ -14,7 +14,7 @@ interface CurrentWeather {
     weather: Array<WeatherInfo>;
 }
 
-interface HourlyWeather {
+export interface HourlyWeather {
     dt: Date;
     temp: number;
     feels_like: number;
@@ -23,7 +23,7 @@ interface HourlyWeather {
     weather: Array<WeatherInfo>;
 }
 
-interface WeatherInfo {
+export interface WeatherInfo {
     id: number;
     main: string;
     description: string;

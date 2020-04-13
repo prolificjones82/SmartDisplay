@@ -4,7 +4,9 @@
     </div>
 </div>
 
-<div *ngIf="weather && !displayError">Weather Information!</div>
+<div *ngIf="weather && !displayError" class="d-flex flex-column h-100">
+    <app-rain-temp-graph [weather]="weather.hourly"></app-rain-temp-graph>
+</div>
 
 <div *ngIf="displayError" class="d-flex justify-content-center align-items-center h-100">
     <p>{{errorMessage}}</p>
